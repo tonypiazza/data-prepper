@@ -21,6 +21,40 @@ dependencies {
     testImplementation 'org.wiremock:wiremock:3.13.2'
 }
 
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integrationTest/java')
+        }
+        resources.srcDir file('src/integrationTest/resources')
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+    group = 'verification'
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+
+    useJUnitPlatform()
+
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    ['tests.gcp.secrets.emulator.endpoint', 'tests.gcp.secrets.live.secret_name'].each { name ->
+        if (System.getProperty(name) != null) {
+            systemProperty name, System.getProperty(name)
+        }
+    }
+
+    filter {
+        includeTestsMatching '*IT'
+    }
+}
+
 test {
     useJUnitPlatform()
 }
