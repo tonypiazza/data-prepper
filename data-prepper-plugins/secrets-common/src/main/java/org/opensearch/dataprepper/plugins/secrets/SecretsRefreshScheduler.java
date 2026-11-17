@@ -33,6 +33,9 @@ public class SecretsRefreshScheduler {
     private final ScheduledExecutorService scheduledExecutorService;
     private final LongSupplier jitterSecondsSupplier;
 
+    /**
+     * Creates a scheduler backed by a single-threaded executor.
+     */
     public SecretsRefreshScheduler() {
         this(Executors.newSingleThreadScheduledExecutor(), () -> ThreadLocalRandom.current().nextLong(MAX_JITTER_SECONDS));
     }
@@ -42,6 +45,15 @@ public class SecretsRefreshScheduler {
         this.jitterSecondsSupplier = jitterSecondsSupplier;
     }
 
+    /**
+     * Schedules a refresh job for every configuration that does not disable refresh. The first run is
+     * delayed by the refresh interval plus up to a minute of jitter.
+     *
+     * @param configurations        the store configurations, keyed by secret configuration ID
+     * @param secretsSupplier       the supplier to refresh
+     * @param pluginConfigPublisher notified after each successful refresh
+     * @param pluginMetrics         used for the refresh metrics
+     */
     public void schedule(final Map<String, ? extends SecretStoreConfiguration> configurations,
                          final SecretsSupplier secretsSupplier,
                          final PluginConfigPublisher pluginConfigPublisher,
@@ -58,6 +70,9 @@ public class SecretsRefreshScheduler {
         });
     }
 
+    /**
+     * Stops scheduling refreshes, waiting up to a minute for a running refresh to finish.
+     */
     public void shutdown() {
         LOG.info("Shutting down secrets refreshing tasks.");
         scheduledExecutorService.shutdown();

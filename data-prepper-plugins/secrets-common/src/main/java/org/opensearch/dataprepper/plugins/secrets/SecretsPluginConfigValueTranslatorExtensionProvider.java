@@ -21,6 +21,9 @@ import java.util.Optional;
 public class SecretsPluginConfigValueTranslatorExtensionProvider implements ExtensionProvider<PluginConfigValueTranslator> {
     private final PluginConfigValueTranslator pluginConfigValueTranslator;
 
+    /**
+     * @param pluginConfigValueTranslator the translator to provide; null provides nothing
+     */
     public SecretsPluginConfigValueTranslatorExtensionProvider(final PluginConfigValueTranslator pluginConfigValueTranslator) {
         this.pluginConfigValueTranslator = pluginConfigValueTranslator;
     }

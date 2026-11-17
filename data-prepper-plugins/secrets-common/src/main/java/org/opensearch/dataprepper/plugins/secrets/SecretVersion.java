@@ -20,16 +20,26 @@ public final class SecretVersion {
     private final String versionName;
     private final byte[] payload;
 
+    /**
+     * @param versionName the cloud resource name of the version
+     * @param payload     the secret value; copied
+     */
     public SecretVersion(final String versionName, final byte[] payload) {
         this.versionName = Objects.requireNonNull(versionName, "versionName must not be null");
         Objects.requireNonNull(payload, "payload must not be null");
         this.payload = Arrays.copyOf(payload, payload.length);
     }
 
+    /**
+     * @return the cloud resource name of the version
+     */
     public String getVersionName() {
         return versionName;
     }
 
+    /**
+     * @return a copy of the secret value
+     */
     public byte[] getPayload() {
         return Arrays.copyOf(payload, payload.length);
     }

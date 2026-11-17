@@ -28,16 +28,28 @@ public class SecretStoreException extends RuntimeException {
 
     private final Reason reason;
 
+    /**
+     * @param reason  the category of failure
+     * @param message the failure message
+     */
     public SecretStoreException(final Reason reason, final String message) {
         super(message);
         this.reason = Objects.requireNonNull(reason, "reason must not be null");
     }
 
+    /**
+     * @param reason  the category of failure
+     * @param message the failure message
+     * @param cause   the underlying failure
+     */
     public SecretStoreException(final Reason reason, final String message, final Throwable cause) {
         super(message, cause);
         this.reason = Objects.requireNonNull(reason, "reason must not be null");
     }
 
+    /**
+     * @return the category of failure
+     */
     public Reason getReason() {
         return reason;
     }

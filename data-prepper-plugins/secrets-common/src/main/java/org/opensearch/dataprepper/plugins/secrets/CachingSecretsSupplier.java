@@ -42,6 +42,14 @@ public class CachingSecretsSupplier implements SecretsSupplier {
     private final Map<String, Counter> destroyFailureCounters;
     private final ConcurrentMap<String, CachedSecret> cachedSecrets = new ConcurrentHashMap<>();
 
+    /**
+     * Creates the supplier and reads every store not marked {@code skip_validation_on_start}.
+     *
+     * @param secretStores  the configured stores, keyed by secret configuration ID
+     * @param objectMapper  used to parse and serialize JSON payloads
+     * @param pluginMetrics used for the {@code secretsVersionDestroyFailure} counter
+     * @throws SecretStoreException if a store cannot be read at startup
+     */
     public CachingSecretsSupplier(final Map<String, SecretStore> secretStores,
                                   final ObjectMapper objectMapper,
                                   final PluginMetrics pluginMetrics) {

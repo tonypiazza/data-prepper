@@ -21,6 +21,12 @@ public class SecretsPluginConfigVariable implements PluginConfigVariable {
     private final String secretKey;
     private Object secretValue;
 
+    /**
+     * @param secretsSupplier the supplier used to refresh and write back the value
+     * @param secretId        the secret configuration ID
+     * @param secretKey       the JSON key, or null for the whole value
+     * @param secretValue     the current value
+     */
     public SecretsPluginConfigVariable(final SecretsSupplier secretsSupplier,
                                        final String secretId,
                                        final String secretKey,

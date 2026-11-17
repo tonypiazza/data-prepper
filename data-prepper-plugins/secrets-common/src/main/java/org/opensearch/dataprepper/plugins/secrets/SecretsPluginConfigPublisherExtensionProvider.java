@@ -21,6 +21,9 @@ import java.util.Optional;
 public class SecretsPluginConfigPublisherExtensionProvider implements ExtensionProvider<PluginConfigPublisher> {
     private final PluginConfigPublisher pluginConfigPublisher;
 
+    /**
+     * @param pluginConfigPublisher the publisher to provide; null provides nothing
+     */
     public SecretsPluginConfigPublisherExtensionProvider(final PluginConfigPublisher pluginConfigPublisher) {
         this.pluginConfigPublisher = pluginConfigPublisher;
     }

@@ -31,14 +31,23 @@ public class SecretStoreConfiguration {
     @JsonProperty("skip_validation_on_start")
     private boolean skipValidationOnStart = false;
 
+    /**
+     * @return how often the secret is refreshed; defaults to one hour
+     */
     public Duration getRefreshInterval() {
         return refreshInterval;
     }
 
+    /**
+     * @return true if periodic refresh is disabled
+     */
     public boolean isDisableRefresh() {
         return disableRefresh;
     }
 
+    /**
+     * @return true if the secret is read on first use rather than at startup
+     */
     public boolean isSkipValidationOnStart() {
         return skipValidationOnStart;
     }

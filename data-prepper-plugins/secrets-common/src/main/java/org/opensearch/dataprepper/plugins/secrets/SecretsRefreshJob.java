@@ -40,6 +40,12 @@ public class SecretsRefreshJob implements Runnable {
     private final Counter limitExceededCounter;
     private final Counter accessDeniedCounter;
 
+    /**
+     * @param secretConfigId        the secret configuration ID to refresh
+     * @param secretsSupplier       the supplier to refresh
+     * @param pluginConfigPublisher notified after a successful refresh
+     * @param pluginMetrics         used for the refresh metrics
+     */
     public SecretsRefreshJob(final String secretConfigId,
                              final SecretsSupplier secretsSupplier,
                              final PluginConfigPublisher pluginConfigPublisher,

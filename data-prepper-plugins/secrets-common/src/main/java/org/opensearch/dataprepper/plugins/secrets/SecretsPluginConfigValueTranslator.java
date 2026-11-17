@@ -29,6 +29,10 @@ public class SecretsPluginConfigValueTranslator implements PluginConfigValueTran
     private final String prefix;
     private final SecretsSupplier secretsSupplier;
 
+    /**
+     * @param prefix          the reference prefix, for example {@code gcp_secrets}
+     * @param secretsSupplier the supplier that resolves references
+     */
     public SecretsPluginConfigValueTranslator(final String prefix, final SecretsSupplier secretsSupplier) {
         this.prefix = prefix;
         this.secretsSupplier = secretsSupplier;

@@ -20,6 +20,11 @@ public final class SecretStore {
     private final SecretStoreAccessor accessor;
     private final SecretStoreConfiguration configuration;
 
+    /**
+     * @param secretName    the cloud resource name of the secret
+     * @param accessor      the accessor for the secret store
+     * @param configuration the store settings
+     */
     public SecretStore(final String secretName,
                        final SecretStoreAccessor accessor,
                        final SecretStoreConfiguration configuration) {
@@ -28,14 +33,23 @@ public final class SecretStore {
         this.configuration = Objects.requireNonNull(configuration, "configuration must not be null");
     }
 
+    /**
+     * @return the cloud resource name of the secret
+     */
     public String getSecretName() {
         return secretName;
     }
 
+    /**
+     * @return the accessor for the secret store
+     */
     public SecretStoreAccessor getAccessor() {
         return accessor;
     }
 
+    /**
+     * @return the store settings
+     */
     public SecretStoreConfiguration getConfiguration() {
         return configuration;
     }
