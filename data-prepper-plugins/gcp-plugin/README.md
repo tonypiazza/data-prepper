@@ -56,3 +56,51 @@ gcp:
 * A `service_account_key` extension default is built at startup, so a bad key or `token_uri` fails fast.
 * `token_uri` is only valid with `service_account_key`, and must not contain user info.
 * Named configurations are not supported yet. Only `default` is accepted.
+
+## GCP Secret Manager (`gcp_secrets`)
+
+Reference GCP Secret Manager secrets from pipeline configuration:
+
+* `${{gcp_secrets:<store>}}` returns the whole payload of the secret's latest version.
+  Use this for secrets that hold a single value.
+* `${{gcp_secrets:<store>:<key>}}` parses the payload as a JSON object and returns `<key>`.
+  Using this form on a payload that isn't a JSON object fails at startup.
+
+Stores are configured under `extensions.gcp.secrets` in `data-prepper-config.yaml` or in a pipeline's `extension` block:
+
+```yaml
+extensions:
+  gcp:
+    secrets:
+      jira-oauth:
+        secret_id: jira-oauth
+        gcp:
+          auth_mode: adc
+        refresh_interval: PT1H
+        disable_refresh: false
+        skip_validation_on_start: false
+        destroy_replaced_version: true
+      shared-token:
+        secret_id: projects/other-project/secrets/api-token
+```
+
+* `secret_id` (required): a secret ID, or a full name `projects/<project>/secrets/<secret>`. A short ID is resolved
+  against the store's `gcp.project_id`, then the `extensions.gcp.configurations.default` project,
+  then the Application Default Credentials project.
+* `gcp` (optional): credentials for this store. If it's omitted, `extensions.gcp.configurations.default` is used,
+  then Application Default Credentials. These values can't themselves use `${{...}}` references, because
+  extension configuration isn't variable-expanded.
+* `destroy_replaced_version` (default `true`): when a plugin writes a secret back (for example the Jira and
+  Confluence sources rotating OAuth tokens), the version that was replaced is destroyed. GCP bills every
+  enabled or disabled version, so without this, each write adds a billed version.
+
+Permissions: reading needs `secretmanager.versions.access`. Write-back needs `secretmanager.versions.add`.
+With `destroy_replaced_version: true` it also needs `secretmanager.versions.destroy`
+(`roles/secretmanager.secretVersionManager`).
+
+The plugin calls the Secret Manager v1 REST API directly, so it adds no Google Cloud SDK dependency.
+It works in both the legacy and OSGi plugin modes.
+
+**Limitation:** only one cloud secrets provider can be configured per Data Prepper instance. If
+`aws_secrets` and `gcp_secrets` are both configured, only one is used. References to the other are passed
+through as literal strings. See #5816.
