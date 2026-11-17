@@ -14,7 +14,11 @@ dependencies {
     implementation libs.google.auth.oauth2.http
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.2.Final'
+    implementation project(':data-prepper-plugins:secrets-common')
+    implementation 'io.micrometer:micrometer-core'
     testImplementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+    testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    testImplementation 'org.wiremock:wiremock:3.13.2'
 }
 
 test {
